@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Netlify Identity - Password Recovery</title>
+    <title>Netlify Identity - Invitation Handling</title>
     <!-- Include Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
     <h1>Welcome to Your Site</h1>
-    <p>Log in or reset your password below.</p>
+    <p>Log in or complete your account setup below.</p>
 
     <!-- Login Button -->
     <button id="login-button" onclick="netlifyIdentity.open()">Log In</button>
@@ -17,8 +17,15 @@
     <script>
       // Initialize Netlify Identity
       if (window.netlifyIdentity) {
-        // Open recovery modal if a recovery token is detected in the URL
+        window.netlifyIdentity.init();
+
+        // Handle invitation token
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        if (urlParams.get("invite_token")) {
+          window.netlifyIdentity.open("signup");
+        }
+
+        // Handle recovery token
         if (urlParams.get("recovery_token")) {
           window.netlifyIdentity.open("recovery");
         }
