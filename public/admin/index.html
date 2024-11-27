@@ -1,11 +1,40 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Content Manager</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netlify Identity - Invitation Handling</title>
+    <!-- Include Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Netlify CMS -->
-    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    <h1>Welcome to Your Site</h1>
+    <p>Log in or complete your account setup below.</p>
+
+    <!-- Login Button -->
+    <button id="login-button" onclick="netlifyIdentity.open()">Log In</button>
+
+    <script>
+      // Initialize Netlify Identity
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.init();
+
+        // Handle invitation token
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        if (urlParams.get("invite_token")) {
+          window.netlifyIdentity.open("signup");
+        }
+
+        // Handle recovery token
+        if (urlParams.get("recovery_token")) {
+          window.netlifyIdentity.open("recovery");
+        }
+
+        // Redirect to admin page after login
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    </script>
   </body>
 </html>
