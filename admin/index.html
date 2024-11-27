@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Netlify Identity Setup</title>
+    <title>Netlify Identity - Password Recovery</title>
     <!-- Include Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
     <h1>Welcome to Your Site</h1>
-    <p>Please log in to access admin features.</p>
+    <p>Log in or reset your password below.</p>
 
     <!-- Login Button -->
     <button id="login-button" onclick="netlifyIdentity.open()">Log In</button>
@@ -17,20 +17,16 @@
     <script>
       // Initialize Netlify Identity
       if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            // Redirect to the admin page after login
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-
-        // Handle recovery tokens from password reset emails
+        // Open recovery modal if a recovery token is detected in the URL
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
         if (urlParams.get("recovery_token")) {
           window.netlifyIdentity.open("recovery");
         }
+
+        // Redirect to admin page after login
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
       }
     </script>
   </body>
